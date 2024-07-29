@@ -1,50 +1,54 @@
 // src/components/Admin.js
 import React, { useState } from 'react';
-import { getStorage, ref, deleteObject, getDownloadURL } from 'firebase/storage';
-import { saveAs } from 'file-saver';
+import { db } from '../firebase';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import * as XLSX from 'xlsx';
 import '../styles/Survey.css';
 
 const Admin = () => {
   const [message, setMessage] = useState('');
 
-  const handleClearAll = async () => {
-    const storage = getStorage();
-    const surveys = ['runningSurvey.xlsx', 'trekkingSurvey.xlsx', 'calcettoSurvey.xlsx', 'padelSurvey.xlsx', 'beachvolleySurvey.xlsx'];
+  const generateExcel = async (surveyType) => {
+    const q = query(collection(db, surveyType), orderBy('nome')); // Example ordering by 'nome'
+    const querySnapshot = await getDocs(q);
 
-    try {
-      await Promise.all(surveys.map(async (survey) => {
-        const fileRef = ref(storage, survey);
-        await deleteObject(fileRef);
-      }));
-      setMessage('All survey files have been cleared.');
-    } catch (error) {
-      console.error('Error clearing files: ', error);
-      setMessage('Error clearing files. Please try again.');
-    }
+    let surveyData = [];
+    querySnapshot.forEach((doc) => {
+      surveyData.push(doc.data());
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(surveyData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Surveys');
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${surveyType}Survey.xlsx`;
+    a.click();
+    window.URL.revokeObjectURL(url);
   };
 
-  const handleDownloadAll = async () => {
-    const storage = getStorage();
-    const surveys = ['runningSurvey.xlsx', 'trekkingSurvey.xlsx', 'calcettoSurvey.xlsx', 'padelSurvey.xlsx', 'beachvolleySurvey.xlsx'];
-
+  const handleGenerateAllExcels = async () => {
     try {
-      await Promise.all(surveys.map(async (survey) => {
-        const fileRef = ref(storage, survey);
-        const url = await getDownloadURL(fileRef);
-        saveAs(url, survey);
-      }));
-      setMessage('All survey files have been downloaded.');
+      await generateExcel('RunningSurvey');
+      await generateExcel('TrekkingSurvey');
+      await generateExcel('CalcettoSurvey');
+      await generateExcel('PadelSurvey');
+      await generateExcel('BeachVolleySurvey');
+      setMessage('All Excel files generated successfully!');
     } catch (error) {
-      console.error('Error downloading files: ', error);
-      setMessage('Error downloading files. Please try again.');
+      console.error('Error generating Excel files: ', error);
+      setMessage('Error generating Excel files. Please try again.');
     }
   };
 
   return (
-    <div className="container admin-panel">
+    <div className="admin-container">
       <h1>Admin Panel</h1>
-      <button onClick={handleClearAll}>Clear All Survey Files</button>
-      <button onClick={handleDownloadAll}>Download All Survey Files</button>
+      <button onClick={handleGenerateAllExcels}>Generate All Excel Files</button>
       {message && <p>{message}</p>}
     </div>
   );

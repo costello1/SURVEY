@@ -32,8 +32,8 @@ const CalcettoSurvey = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await addDoc(collection(db, 'calcettoSurvey'), formData);
-      await updateExcel('calcetto', formData);  // Aggiornare l'Excel
+      const collectionRef = collection(db, 'CalcettoSurvey');
+      await addDoc(collectionRef, formData);
       navigate('/thank-you');
     } catch (error) {
       console.error('Error submitting survey: ', error);

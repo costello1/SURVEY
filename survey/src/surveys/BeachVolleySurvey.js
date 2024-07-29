@@ -32,8 +32,8 @@ const BeachVolleySurvey = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await addDoc(collection(db, 'beachvolleySurvey'), formData);
-      await updateExcel('beachvolley', formData);  // Aggiornare l'Excel
+      const collectionRef = collection(db, 'BeachVolleySurvey');
+      await addDoc(collectionRef, formData);
       navigate('/thank-you');
     } catch (error) {
       console.error('Error submitting survey: ', error);

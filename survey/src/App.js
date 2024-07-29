@@ -8,6 +8,7 @@ import CalcettoSurvey from './surveys/CalcettoSurvey';
 import PadelSurvey from './surveys/PadelSurvey';
 import BeachVolleySurvey from './surveys/BeachVolleySurvey';
 import Admin from './components/Admin';
+import ThankYou from './components/ThankYou'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/survey/padel" element={<PadelSurvey />} />
         <Route path="/survey/beachvolley" element={<BeachVolleySurvey />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/thank-you" element={<ThankYou />} />
       </Routes>
     </Router>
   );

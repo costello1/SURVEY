@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { db } from '../firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
-import updateExcel from '../utils/excel';
 import '../styles/Survey.css';
 
 const PadelSurvey = () => {
@@ -34,8 +33,8 @@ const PadelSurvey = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await addDoc(collection(db, 'padelSurvey'), formData);
-      await updateExcel('padel', formData);  // Aggiornare l'Excel
+      const collectionRef = collection(db, 'PadelSurvey');
+      await addDoc(collectionRef, formData);
       navigate('/thank-you');
     } catch (error) {
       console.error('Error submitting survey: ', error);

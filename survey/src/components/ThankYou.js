@@ -1,16 +1,18 @@
 // src/components/ThankYou.js
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/Survey.css';
+import '../styles/ThankYou.css';
 
 const ThankYou = () => {
   return (
-    <div className="container thank-you">
-      <h1>Grazie per aver completato il questionario!</h1>
-      <p>La tua partecipazione è molto apprezzata.</p>
-      <Link to="/">
-        <button>Vuoi completare un altro questionario?</button>
-      </Link>
+    <div className="thank-you-container">
+      <div className="thank-you-content">
+        <h1>Grazie per aver completato il questionario!</h1>
+        <p>La tua partecipazione è molto apprezzata.</p>
+        <Link to="/">
+          <button className="thank-you-button">Vuoi completare un altro questionario?</button>
+        </Link>
+      </div>
     </div>
   );
 };

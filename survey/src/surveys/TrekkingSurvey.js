@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { db } from '../firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
-import updateExcel from '../utils/excel';
 import '../styles/Survey.css';
 
 const TrekkingSurvey = () => {
@@ -31,8 +30,8 @@ const TrekkingSurvey = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await addDoc(collection(db, 'trekkingSurvey'), formData);
-      await updateExcel('trekking', formData);  // Aggiornare l'Excel
+      const collectionRef = collection(db, 'TrekkingSurvey');
+      await addDoc(collectionRef, formData);
       navigate('/thank-you');
     } catch (error) {
       console.error('Error submitting survey: ', error);
