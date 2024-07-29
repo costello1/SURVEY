@@ -12,7 +12,7 @@ import ThankYou from './components/ThankYou'
 
 function App() {
   return (
-    <Router>
+    <Router basename={process.env.PUBLIC_URL}>
       <Routes>
         <Route path="/" element={<SurveySelection />} />
         <Route path="/survey/running" element={<RunningSurvey />} />
