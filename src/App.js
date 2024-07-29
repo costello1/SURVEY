@@ -8,7 +8,7 @@ import CalcettoSurvey from './surveys/CalcettoSurvey';
 import PadelSurvey from './surveys/PadelSurvey';
 import BeachVolleySurvey from './surveys/BeachVolleySurvey';
 import Admin from './components/Admin';
-import ThankYou from './components/ThankYou'
+import ThankYou from './components/ThankYou';
 
 function App() {
   return (
